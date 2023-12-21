@@ -1,0 +1,76 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to text in js</title>
+    <!-- https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition -->
+    <!-- new webkitSpeechRecognition() || new SpeechRecognition()-->
+    <style>
+        body {
+            background-color: blanchedalmond;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+ 
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+ 
+        form * {
+            width: 50%;
+        }
+ 
+        textarea {
+            height: 250px;
+        }
+ 
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <h1>Speech To Text App</h1>
+        <textarea></textarea>
+        <button type="submit">Speak!</button>
+        <button type="button">Stop</button>
+    </form>
+    <script>
+        let form = document.querySelector("form");
+        let sr = window.webkitSpeechRecognition || window.SpeechRecognition;
+        let spRec = new sr();
+        spRec.lang = "hi";
+       spRec.lang = "eng";
+       //spRec.lang = "span"
+        spRec.continuous = true;
+        spRec.interimResults = true;
+        // console.log(spRec);
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+            spRec.start();
+        })
+        spRec.onresult = res => {
+            let text = Array.from(res.results)
+                .map(r => r[0])
+                .map(txt => txt.transcript)
+                .join("");
+            form[0].value = text;
+            // console.log(text);
+        }
+        form[2].addEventListener("click", () => {
+            spRec.stop()
+        })
+    </script>
+</body>
+</html>
